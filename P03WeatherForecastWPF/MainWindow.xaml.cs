@@ -140,5 +140,72 @@ namespace P03WeatherForecastWPF
                 tbTemperature.Text += $"Temperature in {cityName} is {temp} C" + Environment.NewLine;
             }
         }
+
+        // Scenariusz 4:  wywołanie asynchroniczne nie czkeamy tylko wynik wypisz od razu 
+        private void btnGetTemperatureAsnyc4_Click(object sender, RoutedEventArgs e)
+        {
+            WeatherForecastService wfs = new WeatherForecastService();
+            tbTemperature.Text = "";
+            lvLogger.Items.Clear();
+            string[] cities = txtCity.Text.Split(Environment.NewLine);
+
+          
+            foreach (var city in cities)
+            {
+                var t = Task.Run(() =>  // to co jest w ciele bedzie wykonane asynchrodnicznie 
+                {
+                    int temp = wfs.GetTemperature(city);
+                    return (temp, city);
+                });
+
+                lvLogger.Items.Add($"Started processing city {city}");
+
+                t.GetAwaiter().OnCompleted(() =>
+                {// tutaj definuje dowolny kod, ktory wykonuje sie gdy zadanie jest skonczone 
+                    tbTemperature.Text += $"Temperature in {city} is {t.Result.temp} C" + Environment.NewLine;
+                  //  tbTemperature.Text += $"Temperature in {t.Result.city} is {t.Result.temp} C" + Environment.NewLine;
+                });
+            }
+
+          
+        }
+
+        private async void btnGetTemperatureAsnyc5_Click(object sender, RoutedEventArgs e)
+        {
+            WeatherForecastService wfs = new WeatherForecastService();
+            tbTemperature.Text = "";
+            lvLogger.Items.Clear();
+            string[] cities = txtCity.Text.Split(Environment.NewLine);
+
+            foreach (var city in cities)
+            {
+                lvLogger.Items.Add($"Started processing city {city}");
+
+                var t = await Task.Run(() =>  // to co jest w ciele bedzie wykonane asynchrodnicznie 
+                {
+                    int temp = wfs.GetTemperature(city);
+                    return (temp, city);
+                });
+
+                tbTemperature.Text += $"Temperature in {city} is {t.temp} C" + Environment.NewLine;           
+            }
+        }
+
+        private async void btnGetTemperatureAsnyc6_Click(object sender, RoutedEventArgs e)
+        {
+            WeatherForecastService wfs = new WeatherForecastService();
+            tbTemperature.Text = "";
+            lvLogger.Items.Clear();
+            string[] cities = txtCity.Text.Split(Environment.NewLine);
+
+            foreach (var city in cities)
+            {
+                lvLogger.Items.Add($"Started processing city {city}");
+
+                int temp = await wfs.GetTemperatureAsync(city);
+
+                tbTemperature.Text += $"Temperature in {city} is {temp} C" + Environment.NewLine;
+            }
+        }
     }
 }

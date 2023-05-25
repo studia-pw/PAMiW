@@ -26,6 +26,8 @@
             <Button Content="Get temperature Async 1" x:Name="btnGetTemperatureAsnyc1" Click="btnGetTemperatureAsnyc1_Click"></Button>
             <Button Content="Get temperature Async 2" x:Name="btnGetTemperatureAsnyc2" Click="btnGetTemperatureAsnyc2_Click"></Button>
             <Button Content="Get temperature Async 3" x:Name="btnGetTemperatureAsnyc3" Click="btnGetTemperatureAsnyc3_Click"></Button>
+            <Button Content="Get temperature Async 4" x:Name="btnGetTemperatureAsnyc4" Click="btnGetTemperatureAsnyc4_Click"></Button>
+            <Button Content="Get temperature Async 5" x:Name="btnGetTemperatureAsnyc5" Click="btnGetTemperatureAsnyc5_Click"></Button>
         </StackPanel>
 
         <Grid>
