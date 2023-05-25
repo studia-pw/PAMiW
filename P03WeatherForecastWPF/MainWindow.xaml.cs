@@ -38,7 +38,7 @@ namespace P03WeatherForecastWPF
             } 
         }
 
-        // Scenariusz: wywołanie asynchronicznie jedno miasto po drugim
+        // Scenariusz 1: wywołanie asynchronicznie jedno miasto po drugim
         // 
         private async void btnGetTemperatureAsnyc1_Click(object sender, RoutedEventArgs e)
         {
@@ -59,6 +59,7 @@ namespace P03WeatherForecastWPF
             }
         }
 
+        // Scenariusz 2:  wywołanie asynchroniczne ale czekamy na az wszystkie zadania sie wykonaja
         private async void btnGetTemperatureAsnyc2_Click(object sender, RoutedEventArgs e)
         {
             WeatherForecastService wfs = new WeatherForecastService();
@@ -101,6 +102,8 @@ namespace P03WeatherForecastWPF
         //    public int Temperature { get; set; }
         //}
 
+        // Scenariusz 3:  wywołanie asynchroniczne ale czekamy na az wszystkie zadania sie wykonaja
+        // tym razem rozszerzamy taska o to zeby przchowywal dowolne dane 
         private async void btnGetTemperatureAsnyc3_Click(object sender, RoutedEventArgs e)
         {
             WeatherForecastService wfs = new WeatherForecastService();
