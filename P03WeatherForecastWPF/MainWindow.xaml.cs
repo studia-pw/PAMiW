@@ -177,6 +177,9 @@ namespace P03WeatherForecastWPF
             lvLogger.Items.Clear();
             string[] cities = txtCity.Text.Split(Environment.NewLine);
 
+            pbProgress.Maximum = cities.Length;
+            pbProgress.Value = 0;
+
             foreach (var city in cities)
             {
                 lvLogger.Items.Add($"Started processing city {city}");
@@ -187,6 +190,7 @@ namespace P03WeatherForecastWPF
                     return (temp, city);
                 });
 
+                pbProgress.Value += 1;
                 tbTemperature.Text += $"Temperature in {city} is {t.temp} C" + Environment.NewLine;           
             }
         }
@@ -198,6 +202,9 @@ namespace P03WeatherForecastWPF
             lvLogger.Items.Clear();
             string[] cities = txtCity.Text.Split(Environment.NewLine);
 
+            pbProgress.Maximum = cities.Length;
+            pbProgress.Value = 0;
+
             foreach (var city in cities)
             {
                 lvLogger.Items.Add($"Started processing city {city}");
@@ -205,6 +212,7 @@ namespace P03WeatherForecastWPF
                 int temp = await wfs.GetTemperatureAsync(city);
 
                 tbTemperature.Text += $"Temperature in {city} is {temp} C" + Environment.NewLine;
+                pbProgress.Value += 1;
             }
         }
     }

@@ -41,7 +41,7 @@ namespace P03WeatherForecastWPF.Services
             //string result = match.Groups[0].Value;// tutaj siedzi cały dopasowany ciag
             string result = match.Groups[1].Value;
 
-            return Convert.ToInt32(result);
+            return await Task.FromResult(Convert.ToInt32(result));
 
         }
     }

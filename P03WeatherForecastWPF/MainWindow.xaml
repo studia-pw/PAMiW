@@ -31,6 +31,7 @@
         </Menu>
 
         <StackPanel DockPanel.Dock="Left">
+            <ProgressBar x:Name="pbProgress" Height="20"></ProgressBar>
             <Label Style="{StaticResource RedControl}"  Content="City:"></Label>
             <TextBox x:Name="txtCity" AcceptsReturn="True"></TextBox>
             <Button Style="{StaticResource RedButtons}" Content="Get temperature" x:Name="btnGetTemperature" Click="btnGetTemperature_Click"></Button>
