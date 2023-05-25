@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using P04WeatherForecastAPI.Client.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -15,10 +17,22 @@ namespace P04WeatherForecastAPI.Client.Services
         private const string autocomplete_endpoint = "locations/v1/cities/autocomplete?apikey={0}&q={1}&language{2}";
         private const string current_conditions_endpoint = "currentconditions/v1/{0}?apikey={1}&language{2}";
 
-        private const string api_key = "5hFl75dja3ZuKSLpXFxUzSc9vXdtnwG5";
-        private const string language = "pl";
+        // private const string api_key = "5hFl75dja3ZuKSLpXFxUzSc9vXdtnwG5";
+        string api_key;
+        //private const string language = "pl";
+        string language;
 
+        public AccuWeatherService()
+        {
+            var builder = new ConfigurationBuilder()
+                .AddUserSecrets<App>()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsetings.json"); 
 
+            var configuration = builder.Build();
+            api_key = configuration["api_key"];
+            language = configuration["default_language"];
+        }
 
 
         public async Task<City[]> GetLocations(string locationName)
