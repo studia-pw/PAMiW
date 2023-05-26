@@ -30,19 +30,45 @@ namespace P03WeatherForecastWPF.Services
 
         public async Task<int> GetTemperatureAsync(string city)
         {
-            WebClient wc = new WebClient();
-            //  wc.DownloadStringAsync(new Uri(url + " " + city));
+            using (WebClient wc = new WebClient())
+            {
+                string data = await wc.DownloadStringTaskAsync(url + " " + city);
+                Regex rx = new Regex(regexTemplate);
+                Match match = rx.Match(data);
+                string result = match.Groups[1].Value;
+                return Convert.ToInt32(result);
+            }
 
-            // return 5;
-            string data = wc.DownloadString(url + " " + city);
-            Regex rx = new Regex(regexTemplate);
-            Match match = rx.Match(data);
+        }
 
-            //string result = match.Groups[0].Value;// tutaj siedzi cały dopasowany ciag
-            string result = match.Groups[1].Value;
+        public async Task<int> GetTemperatureAsync2(string city)
+        {
+            return await Task.Run(() =>
+            {
+                using (WebClient wc = new WebClient())
+                {
+                    string data = wc.DownloadString(url + " " + city);
+                    Regex rx = new Regex(regexTemplate);
+                    Match match = rx.Match(data);
+                    string result = match.Groups[1].Value;
+                    return Convert.ToInt32(result);
+                }
+            });
+        }
 
-            return await Task.FromResult(Convert.ToInt32(result));
-
+        public async Task<int> GetTemperatureAsync3(string city)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                string data = await wc.DownloadStringTaskAsync(url + " " + city);
+                string result = await Task.Run(() =>
+                {
+                    Regex rx = new Regex(regexTemplate);
+                    Match match = rx.Match(data);
+                    return match.Groups[1].Value;
+                });
+                return Convert.ToInt32(result);
+            }
         }
     }
 }
