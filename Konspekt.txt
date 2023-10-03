@@ -12,6 +12,6 @@ dotnet sln add .\P02WeatherForecastApp\P02WeatherForecastApp.csproj
 4) sposoby przetwrzania asynchroicznego 
 
 5) polacenie z api pogodowe 
- - mapowanie klas 
+ - mapowanie klas https://json2csharp.com/
  - przechowywanie danych w sekretach i konfiguracji 
 
