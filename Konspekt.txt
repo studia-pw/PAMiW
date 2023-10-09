@@ -1,4 +1,4 @@
-
+...
 
 1 ) wprowadzenie do net core 
 dotnet new console -n P02WeatherForecastApp
