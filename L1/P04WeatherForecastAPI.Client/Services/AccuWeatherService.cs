@@ -14,10 +14,10 @@ namespace P04WeatherForecastAPI.Client.Services
     internal class AccuWeatherService
     {
         private const string base_url = "http://dataservice.accuweather.com";
-        private const string autocomplete_endpoint = "locations/v1/cities/autocomplete?apikey={0}&q={1}&language{2}";
-        private const string current_conditions_endpoint = "currentconditions/v1/{0}?apikey={1}&language{2}";
-        private const string top_50_cities_endpoint = "locations/v1/topcities/50?apikey={0}&language{1}";
-        private const string city_info_endpoint = "locations/v1/{0}?apikey={1}&language{2}&details={3}";
+        private const string autocomplete_endpoint = "locations/v1/cities/autocomplete?apikey={0}&q={1}&language={2}";
+        private const string current_conditions_endpoint = "currentconditions/v1/{0}?apikey={1}&language={2}";
+        private const string top_50_cities_endpoint = "locations/v1/topcities/50?apikey={0}&language={1}";
+        private const string city_info_endpoint = "locations/v1/{0}?apikey={1}&language={2}&details={3}";
 
 
         // private const string api_key = "5hFl75dja3ZuKSLpXFxUzSc9vXdtnwG5";

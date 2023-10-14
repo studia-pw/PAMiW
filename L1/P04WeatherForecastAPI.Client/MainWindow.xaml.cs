@@ -57,7 +57,7 @@ namespace P04WeatherForecastAPI.Client
 
                 CityInfo cityInfo = await accuWeatherService.GetCityInfo(selectedCity.Key);
 
-                lblCountryName.Content = cityInfo.LocalizedName;
+                lblCountryName.Content = cityInfo.Country.LocalizedName;
 
 
                 if (cityInfo.Details.Population != null) {
