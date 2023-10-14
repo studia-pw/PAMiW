@@ -2,6 +2,7 @@
 using P04WeatherForecastAPI.Client.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Resources;
 using System.Windows.Shapes;
 
 namespace P04WeatherForecastAPI.Client
@@ -32,7 +34,7 @@ namespace P04WeatherForecastAPI.Client
         private async void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             
-            City[] cities= await accuWeatherService.GetLocations(txtCity.Text);
+            City[] cities = await accuWeatherService.GetLocations(txtCity.Text);
 
             // standardowy sposób dodawania elementów
             //lbData.Items.Clear();
@@ -45,14 +47,40 @@ namespace P04WeatherForecastAPI.Client
 
         private async void lbData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedCity= (City)lbData.SelectedItem;
-            if(selectedCity != null)
+            var selectedCity = (City)lbData.SelectedItem;
+            if (selectedCity != null)
             {
                 var weather = await accuWeatherService.GetCurrentConditions(selectedCity.Key);
                 lblCityName.Content = selectedCity.LocalizedName;
                 double tempValue = weather.Temperature.Metric.Value;
                 lblTemperatureValue.Content = Convert.ToString(tempValue);
+
+                CityInfo cityInfo = await accuWeatherService.GetCityInfo(selectedCity.Key);
+
+                lblCountryName.Content = cityInfo.LocalizedName;
+
+
+                if (cityInfo.Details.Population != null) {
+                    lblPopulation.Content = Convert.ToString(cityInfo.Details.Population);
+                }
             }
         }
+
+        private async void btnTop50Cities_Click(object sender, RoutedEventArgs e) {
+            City[] cities = await accuWeatherService.GetTop50Cities();
+
+            List<BindindTop50> bindingTop50s = new List<BindindTop50>();
+
+            foreach (City city in cities) {
+                bindingTop50s.Add(new BindindTop50 {
+                    Property1 = city.LocalizedName,
+                    Property2 = city.Country.LocalizedName,
+                    Property3 = city.Region.LocalizedName
+                });
+            }
+
+            lbData1.ItemsSource = bindingTop50s;
+        }
+
     }
 }

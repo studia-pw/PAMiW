@@ -18,6 +18,35 @@
             <Label x:Name="lblCityName" HorizontalAlignment="Center" Content="..."></Label>
             <Label  HorizontalAlignment="Center" Content="is:"></Label>
             <Label x:Name="lblTemperatureValue" HorizontalAlignment="Center" Content=".."></Label>
+            <Label HorizontalAlignment="Center" Content="City is in:"></Label>
+            <Label x:Name="lblCountryName" HorizontalAlignment="Center" Content="..."></Label>
+            <Label HorizontalAlignment="Center" Content="City population:"></Label>
+            <Label x:Name="lblPopulation" HorizontalAlignment="Center" Content="..."></Label>
+
+        </StackPanel>
+
+         <!-- New area with a button for Top 50 cities -->
+        <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
+            <Button Content="Top 50 cities" Click="btnTop50Cities_Click"></Button>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ListBox x:Name="lbData1" Height="100">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Property1}" />
+                                <TextBlock Text=" | " />
+                                <TextBlock Text="{Binding Property2}" />
+                                <TextBlock Text=" | " />
+                                <TextBlock Text="{Binding Property3}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
         </StackPanel>
     </DockPanel>
+
+     
+
 </Window>
