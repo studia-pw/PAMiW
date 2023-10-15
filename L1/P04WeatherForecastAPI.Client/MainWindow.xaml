@@ -25,6 +25,20 @@
 
         </StackPanel>
 
+        <StackPanel>
+            <Label Content="Forecast:" ></Label>
+            <Button x:Name="btnForecast" Content="Search" Click="btnForecast_Click"></Button>
+            <Label x:Name="lblForecastText" Content="..."></Label>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Temperature from: "/>
+                <TextBlock Text="{Binding minTemp}" />
+                <TextBlock Text="°C" />
+                <TextBlock Text=" to: "/>
+                <TextBlock Text="{Binding maxTemp}" />
+                <TextBlock Text="°C" />
+            </StackPanel>
+        </StackPanel>
+
             <!-- New area with a button for Top 50 cities -->
         <StackPanel Orientation="Horizontal">
             <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
@@ -69,21 +83,9 @@
             </StackPanel>
         </StackPanel>
         
-        <StackPanel>
-            <Label Content="Forecast:" ></Label>
-            <Button x:Name="btnForecast" Content="Search" Click="btnForecast_Click"></Button>
-            <Label x:Name="lblForecastText" Content="..."></Label>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Temperature from: "/>
-                <TextBlock Text="{Binding minTemp}" />
-                <TextBlock Text="°C" />
-                <TextBlock Text=" to: "/>
-                <TextBlock Text="{Binding maxTemp}" />
-                <TextBlock Text="°C" />
-            </StackPanel>
-        </StackPanel>
+       
 
-        <StackPanel HorizontalAlignment="Center">
+        <StackPanel Width="150">
                 <Button Content="Region List" Click="btnRegionList_Click"></Button>
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
