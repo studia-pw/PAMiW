@@ -2,6 +2,7 @@
 using P04WeatherForecastAPI.Client.Services;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -80,6 +81,43 @@ namespace P04WeatherForecastAPI.Client
             }
 
             lbData1.ItemsSource = bindingTop50s;
+        }
+
+          private async void btnForecast_Click(object sender, RoutedEventArgs e) {
+            var selectedCity = (City)lbData.SelectedItem;
+            if (selectedCity != null) {
+                Forecast forecast = await accuWeatherService.GetCity1DayForecast(selectedCity.Key);
+                lblForecastText.Content = forecast.Headline.Text;
+                var temps = new {
+                    minTemp = forecast.DailyForecasts.FirstOrDefault().Temperature.Minimum.Value,
+                    maxTemp = forecast.DailyForecasts.FirstOrDefault().Temperature.Maximum.Value
+                };
+                DataContext = temps;
+            }
+
+        }
+
+        private async void btnTop50CitiesConditions_Click(object sender, RoutedEventArgs e) {
+            TopCitiesConditions[] cities = await accuWeatherService.GetTop50CitiesCurrentConditions();
+
+            List<BindindTop50> bindingTop50s = new List<BindindTop50>();
+
+            foreach (TopCitiesConditions city in cities) {
+                bindingTop50s.Add(new BindindTop50 {
+                    Property1 = city.LocalizedName,
+                    Property2 = city.Country.LocalizedName,
+                    Property3 = Convert.ToString(city.Temperature.Metric.Value)
+                });
+            }
+
+            lbData2.ItemsSource = bindingTop50s;
+        }
+
+          private async void btnRegionList_Click(object sender, RoutedEventArgs e) {
+            Region[] regions = await accuWeatherService.GetRegionList();
+
+
+            lbData3.ItemsSource = regions;
         }
 
     }
