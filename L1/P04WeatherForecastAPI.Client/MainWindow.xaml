@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P04WeatherForecastAPI.Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="300">
+        Title="Weather App" Height="400" Width="930">
     <DockPanel>
         <StackPanel Width="150" DockPanel.Dock="Left">
             <Label Content="City:" ></Label>
             <TextBox x:Name="txtCity"></TextBox>
             <Button x:Name="btnSearch" Content="Search" Click="btnSearch_Click"></Button>
-            <ListBox x:Name="lbData" DisplayMemberPath="LocalizedName" SelectionChanged="lbData_SelectionChanged"></ListBox>
+            <ListBox MaxHeight="100" x:Name="lbData" DisplayMemberPath="LocalizedName" SelectionChanged="lbData_SelectionChanged"></ListBox>
         </StackPanel>
         <StackPanel>
             <Label HorizontalAlignment="Center" Content="Temperature for city:"></Label>
@@ -25,10 +25,10 @@
 
         </StackPanel>
 
-        <StackPanel>
+        <StackPanel Width="300">
             <Label Content="Forecast:" ></Label>
             <Button x:Name="btnForecast" Content="Search" Click="btnForecast_Click"></Button>
-            <Label x:Name="lblForecastText" Content="..."></Label>
+            <TextBlock x:Name="lblForecastText" Text="..." TextWrapping="Wrap"></TextBlock>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Temperature from: "/>
                 <TextBlock Text="{Binding minTemp}" />
@@ -40,8 +40,8 @@
         </StackPanel>
 
             <!-- New area with a button for Top 50 cities -->
-        <StackPanel Orientation="Horizontal">
-            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
+        <StackPanel Orientation="Vertical">
+            <StackPanel HorizontalAlignment="Left" Width="350">
                 <Button Content="Top 50 cities" Click="btnTop50Cities_Click"></Button>
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -61,46 +61,46 @@
                 </ScrollViewer>
             </StackPanel>
 
-            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
-                <Button Content="Top 50 cities with current conditions" Click="btnTop50CitiesConditions_Click"></Button>
+                <StackPanel HorizontalAlignment="Left" Width="350">
+                    <Button Content="Top 50 cities with current conditions" Click="btnTop50CitiesConditions_Click"></Button>
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ListBox x:Name="lbData2" Height="100">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Property1}" />
-                                    <TextBlock Text=" | " />
-                                    <TextBlock Text="{Binding Property2}" />
-                                    <TextBlock Text=" | " />
-                                    <TextBlock Text="{Binding Property3}" />
-                                    <TextBlock Text="°C" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </ScrollViewer>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox x:Name="lbData2" Height="100">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Property1}" />
+                                        <TextBlock Text=" | " />
+                                        <TextBlock Text="{Binding Property2}" />
+                                        <TextBlock Text=" | " />
+                                        <TextBlock Text="{Binding Property3}" />
+                                        <TextBlock Text="°C" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
             </StackPanel>
-        </StackPanel>
+            
         
-       
 
-        <StackPanel Width="150">
-                <Button Content="Region List" Click="btnRegionList_Click"></Button>
+            <StackPanel Width="350" HorizontalAlignment="Left">
+                    <Button Content="Region List" Click="btnRegionList_Click"></Button>
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ListBox x:Name="lbData3" Height="100">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding ID}" />
-                                    <TextBlock Text=" | " />
-                                    <TextBlock Text="{Binding LocalizedName}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </ScrollViewer>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox x:Name="lbData3" Height="100">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding ID}" />
+                                        <TextBlock Text=" | " />
+                                        <TextBlock Text="{Binding LocalizedName}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </StackPanel>
             </StackPanel>
                     
     </DockPanel>

@@ -87,7 +87,7 @@ namespace P04WeatherForecastAPI.Client
             var selectedCity = (City)lbData.SelectedItem;
             if (selectedCity != null) {
                 Forecast forecast = await accuWeatherService.GetCity1DayForecast(selectedCity.Key);
-                lblForecastText.Content = forecast.Headline.Text;
+                lblForecastText.Text = forecast.Headline.Text;
                 var temps = new {
                     minTemp = forecast.DailyForecasts.FirstOrDefault().Temperature.Minimum.Value,
                     maxTemp = forecast.DailyForecasts.FirstOrDefault().Temperature.Maximum.Value
