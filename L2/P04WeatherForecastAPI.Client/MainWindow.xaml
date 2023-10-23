@@ -10,6 +10,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="boolToVisConv" ></BooleanToVisibilityConverter>
         <converters:TemperatureToDisplayConverter x:Key="tmpToDispConv"></converters:TemperatureToDisplayConverter>
+        <converters:PopulationToDisplayConverter x:Key="popToDispConv"></converters:PopulationToDisplayConverter>
     </Window.Resources>
 
 
@@ -53,7 +54,7 @@
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <Label HorizontalAlignment="Center" Content="City population:"></Label>
-                            <Label x:Name="lblPopulation" HorizontalAlignment="Center" Content="{Binding CityInfoView.Population}"></Label>
+                            <Label x:Name="lblPopulation" HorizontalAlignment="Center" Content="{Binding CityInfoView.Population, Converter={StaticResource popToDispConv}}"></Label>
                         </StackPanel>
                     </StackPanel>
                 </Border>

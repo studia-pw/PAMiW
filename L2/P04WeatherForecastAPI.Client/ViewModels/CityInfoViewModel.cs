@@ -9,7 +9,7 @@ namespace P04WeatherForecastAPI.Client.ViewModels
 
         public string LocalizedCountryName { get; set; }
 
-        public double Population { get; set; }
+        public long? Population { get; set; }
 
         public CityInfoViewModel(CityInfo cityInfo) {
             LocalizedName = cityInfo.LocalizedName;
