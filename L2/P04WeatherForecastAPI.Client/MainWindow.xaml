@@ -1,0 +1,124 @@
+﻿<Window x:Class="P04WeatherForecastAPI.Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:P04WeatherForecastAPI.Client"
+        xmlns:converters="clr-namespace:P04WeatherForecastAPI.Client.Converters"
+        mc:Ignorable="d"
+        Title="Weather App" SizeToContent="Width" Height="400">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVisConv" ></BooleanToVisibilityConverter>
+        <converters:TemperatureToDisplayConverter x:Key="tmpToDispConv"></converters:TemperatureToDisplayConverter>
+    </Window.Resources>
+
+
+        <DockPanel Margin="10,0,10,0">
+            <StackPanel Orientation="Vertical">
+
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Width="150" DockPanel.Dock="Left">
+                        <Label Content="City:" ></Label>
+                        <TextBox x:Name="txtCity"></TextBox>
+                        <Button x:Name="btnSearch" Content="Search" Command="{Binding LoadCitiesCommand}" CommandParameter="{Binding Text, ElementName=txtCity}"></Button>
+                        <ListBox MaxHeight="100" x:Name="lbData" ItemsSource="{Binding Cities}" SelectedItem="{Binding SelectedCity}" DisplayMemberPath="LocalizedName"></ListBox>
+                    </StackPanel>
+
+                    <StackPanel Margin="10,0,10,0" Width="300">
+                        <Label Content="Forecast:" ></Label>
+                        <Button x:Name="btnForecast" Content="Get Forecast" Command="{Binding LoadForecastCommand}"></Button>
+                        <TextBlock x:Name="lblForecastText" Text="{Binding ForecastView.HeadlineText}" TextWrapping="Wrap"></TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Temperature from: "/>
+                            <TextBlock Text="{Binding ForecastView.Temperature.Minimum.Value, Converter={StaticResource tmpToDispConv}}" />
+                            <TextBlock Text=" to: "/>
+                            <TextBlock Text="{Binding ForecastView.Temperature.Maximum.Value, Converter={StaticResource tmpToDispConv}}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <Border Margin="20,20,20,0" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Padding="3">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label Content="Temperature for city:"></Label>
+                            <Label x:Name="lblCityName" HorizontalAlignment="Center" Content="{Binding SelectedCity.LocalizedName}"></Label>
+                            <Label  HorizontalAlignment="Center" Content="is:"></Label>
+                            <Label x:Name="lblTemperatureValue" HorizontalAlignment="Center" Content="{Binding WeatherView.CurrentTemperature, Converter={StaticResource tmpToDispConv}}"></Label>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label HorizontalAlignment="Center" Content="City is in:"></Label>
+                            <Label x:Name="lblCountryName" HorizontalAlignment="Center" Content="{Binding CityInfoView.LocalizedCountryName}"></Label>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label HorizontalAlignment="Center" Content="City population:"></Label>
+                            <Label x:Name="lblPopulation" HorizontalAlignment="Center" Content="{Binding CityInfoView.Population}"></Label>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+
+                <StackPanel Width="350" HorizontalAlignment="Left">
+                    <Button Content="Region List" Command="{Binding LoadRegionsCommand}"></Button>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox x:Name="lbData3" Height="100" ItemsSource="{Binding Regions}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding ID}" />
+                                        <TextBlock Text=" | " />
+                                        <TextBlock Text="{Binding LocalizedName}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </StackPanel>
+
+                <StackPanel HorizontalAlignment="Left" Width="350">
+                    <Button Content="Top 50 cities" Command="{Binding LoadTop50CitiesCommand}"></Button>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox x:Name="lbData1" Height="100" ItemsSource="{Binding Top50Cities}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding LocalizedName}" />
+                                        <TextBlock Text=" | " />
+                                        <TextBlock Text="{Binding LocalizedCountryName}" />
+                                        <TextBlock Text=" | " />
+                                        <TextBlock Text="{Binding LocalizedRegionName}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </StackPanel>
+
+                <StackPanel HorizontalAlignment="Left" Width="350">
+                    <Button Content="Top 50 cities with current conditions" Command="{Binding LoadTop50CitiesConditionsCommand}"></Button>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox x:Name="lbData2" Height="100" ItemsSource="{Binding Top50CitiesConditions}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding LocalizedName}" />
+                                        <TextBlock Text=" | " />
+                                        <TextBlock Text="{Binding LocalizedCountryName}" />
+                                        <TextBlock Text=" | " />
+                                        <TextBlock Text="{Binding Temperature, Converter={StaticResource tmpToDispConv}}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </StackPanel>
+
+            </StackPanel>
+        </DockPanel>
+        
+</Window>
