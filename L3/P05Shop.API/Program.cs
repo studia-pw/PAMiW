@@ -1,5 +1,8 @@
 using P05Shop.API.Services.ProductService;
+using P05Shop.API.Services.SongService;
 using P06Shop.Shared.Services.ProductService;
+using P06Shop.Shared.Services.SongService;
+using P07Shop.DataSeeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddSingleton<ISongService, SongService>();
 
 // addScoped - obiekt jest tworzony za kazdym razem dla nowego zapytania http
 // jedno zaptranie tworzy jeden obiekt 

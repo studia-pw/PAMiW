@@ -13,7 +13,6 @@ namespace P04WeatherForecastAPI.Client.Configuration
         public string BaseAPIUrl { get; set; }
 
         public BaseProductEndpoint BaseProductEndpoint { get; set; }
-
-
+        public BaseSongEndpoint BaseSongEndpoint { get; set; }
     }
 }
