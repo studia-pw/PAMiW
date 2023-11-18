@@ -1,50 +1,47 @@
-﻿using P06Shop.Shared;
+﻿using Microsoft.EntityFrameworkCore;
+using P05Shop.API.Models;
+using P06Shop.Shared;
 using P06Shop.Shared.Services.ProductService;
 using P06Shop.Shared.Services.SongService;
 using P06Shop.Shared.Shop;
 using P06Shop.Shared.SongModel;
 using P07Shop.DataSeeder;
+using System.Runtime.InteropServices;
 
 namespace P05Shop.API.Services.SongService
 {
     public class SongService : ISongService
     {
 
-        private List<Song> _songRepository { get; set; }
+        private readonly DataContext _dataContext;
         private bool _songSeederError;
 
-        public SongService() 
+        public SongService(DataContext dataContext) 
         {
             _songSeederError = false;
-
-            try
-            {
-                _songRepository = SongSeeder.GenerateSongData();
-            } catch (Exception e)
-            {
-                _songSeederError = true;
-            }
+            _dataContext = dataContext;
         }
 
         public async Task<ServiceResponse<List<Song>>> GetSongsAsync()
         {
-            if (!_songSeederError)
+            try
             {
+                var songs = await _dataContext.Songs.ToListAsync();
                 var response = new ServiceResponse<List<Song>>()
                 {
-                    Data = _songRepository,
+                    Data = songs,
                     Message = "Ok",
                     Success = true
                 };
 
                 return response;
             }
-            else 
+            catch (Exception ex)
             {
                 return new  ServiceResponse<List<Song>>()
                 {
                     Data = null,
-                    Message = "Problem with dataseeder library",
+                    Message = "Problem getting the songs",
                     Success = false
                 };
             }
@@ -52,25 +49,26 @@ namespace P05Shop.API.Services.SongService
 
         public async Task<ServiceResponse<Song>> CreateSongAsync(Song song)
         {
-            if (!CheckIfSongExistsById(song.Id))
+            try
             {
-                _songRepository.Add(song);
+                await _dataContext.AddAsync(song);
+                await _dataContext.SaveChangesAsync();
 
                 var response = new ServiceResponse<Song>()
                 {
-                    Data = song,
+                    Data = null,
                     Message = "OK",
                     Success = true
                 };
 
                 return response;
             }
-            else 
+            catch (Exception) 
             {
                 var response = new ServiceResponse<Song>()
                 {
                     Data = null,
-                    Message = "Song already exists",
+                    Message = "Cannot add song",
                     Success = false
                 };
 
@@ -78,11 +76,13 @@ namespace P05Shop.API.Services.SongService
             }
         }
 
-        public async Task<ServiceResponse<bool>> DeleteMovieAsync(long id)
+        public async Task<ServiceResponse<bool>> DeleteSongByIdAsync(long id)
         {
-            if (CheckIfSongExistsById(id))
+            var toDelete = _dataContext.Songs.Find(id);
+            if (toDelete != null)
             {
-                _songRepository = _songRepository.Where(x => x.Id != id).ToList();
+                _dataContext.Songs.Remove(toDelete);
+                await _dataContext.SaveChangesAsync();
 
                 var response = new ServiceResponse<bool>()
                 {
@@ -111,7 +111,7 @@ namespace P05Shop.API.Services.SongService
         {
             try 
             {
-                var song = _songRepository.Where(x => x.Id == id).First();
+                var song = _dataContext.Songs.Find(id);
                 if (song == null)
                 {
                     return new ServiceResponse<Song>()
@@ -144,14 +144,16 @@ namespace P05Shop.API.Services.SongService
 
         public async Task<ServiceResponse<Song>> UpdateSongAsync(Song song)
         {
-            if (CheckIfSongExistsById(song.Id))
+            var toUpdate = _dataContext.Songs.Find(song.Id);
+            if (toUpdate != null)
             {
-                _songRepository = _songRepository.Where(x => x.Id != song.Id).ToList();
-                _songRepository.Add(song);
+                
+                updateSongFromUpdateRequest(toUpdate, song);
+                await _dataContext.SaveChangesAsync();
 
                 var response = new ServiceResponse<Song>()
                 {
-                    Data = song,
+                    Data = toUpdate,
                     Message = "OK",
                     Success = true
                 };
@@ -171,11 +173,26 @@ namespace P05Shop.API.Services.SongService
             }
         }
 
-        private bool CheckIfSongExistsById(long id) {
-            if (_songRepository.Select(data => data.Id).Contains(id)) 
-                return true;
+        private void updateSongFromUpdateRequest(Song song, Song songReq)
+        {
+            if (!string.IsNullOrWhiteSpace(songReq.Artist))
+            {
+                song.Artist = songReq.Artist;
+            }
 
-            return false;
-        }   
+            if (songReq.Duration > 0) {
+                song.Duration = songReq.Duration;
+            }
+
+            if (!string.IsNullOrWhiteSpace(songReq.AlbumTitle))
+            {
+                song.AlbumTitle = songReq.AlbumTitle;
+            }
+
+            if (!string.IsNullOrWhiteSpace(songReq.Title))
+            {
+                song.Title = songReq.Title;
+            }
+        }
     }
 }

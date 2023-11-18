@@ -74,7 +74,7 @@ namespace P05Shop.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<bool>>> DeleteSong([FromRoute] long id)
         {
-            var result = await _songService.DeleteMovieAsync(id);
+            var result = await _songService.DeleteSongByIdAsync(id);
 
             if (result.Success)
                 return Ok(result);

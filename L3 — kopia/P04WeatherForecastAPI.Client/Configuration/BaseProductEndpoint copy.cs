@@ -10,5 +10,9 @@ namespace P04WeatherForecastAPI.Client.Configuration
     {
         public string Base_url { get; set; }
         public string GetAllSongsEndpoint {  get; set; }
+        public string GetSongEndpoint { get; set; }
+        public string DeleteSongEndpoint { get; set; }
+        public string UpdateSongEndpoint { get; set; }
+        public string CreateSongEndpoint { get; set; }
     }
 }

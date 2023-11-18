@@ -13,8 +13,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace P04WeatherForecastAPI.Client.Services.SongServices
 {
@@ -28,19 +30,28 @@ namespace P04WeatherForecastAPI.Client.Services.SongServices
             _appSettings= appSettings.Value;
         }
 
-        public Task<ServiceResponse<Song>> CreateSongAsync(Song song)
+        public async Task<ServiceResponse<Song>> CreateSongAsync(Song song)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync(_appSettings.BaseSongEndpoint.CreateSongEndpoint, song);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<Song>>();
+            return result;
         }
 
-        public Task<ServiceResponse<bool>> DeleteMovieAsync(long id)
+        public async Task<ServiceResponse<bool>> DeleteSongByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            var URI = string.Format(_appSettings.BaseSongEndpoint.DeleteSongEndpoint, id.ToString());
+            var response = await _httpClient.DeleteAsync(URI);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            return result;
         }
 
-        public Task<ServiceResponse<Song>> GetSongByIdAsync(long id)
+        public async Task<ServiceResponse<Song>> GetSongByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            var url = _appSettings.BaseSongEndpoint.GetSongEndpoint.Replace("{id}", id.ToString());
+
+            var response = await _httpClient.GetAsync(url);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<Song>>();
+            return result;
         }
 
 
@@ -66,9 +77,11 @@ namespace P04WeatherForecastAPI.Client.Services.SongServices
             return result;
         }
 
-        public Task<ServiceResponse<Song>> UpdateSongAsync(Song song)
+        public async Task<ServiceResponse<Song>> UpdateSongAsync(Song song)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PutAsJsonAsync(_appSettings.BaseSongEndpoint.UpdateSongEndpoint, song);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<Song>>();
+            return result;
         }
     }
 }

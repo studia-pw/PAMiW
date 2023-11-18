@@ -10,6 +10,6 @@ namespace P06Shop.Shared.Services.SongService
         Task<ServiceResponse<Song>> GetSongByIdAsync(long id);
         Task<ServiceResponse<Song>> CreateSongAsync(Song song);
         Task<ServiceResponse<Song>> UpdateSongAsync(Song song);
-        Task<ServiceResponse<bool>> DeleteMovieAsync(long id);
+        Task<ServiceResponse<bool>> DeleteSongByIdAsync(long id);
     }
 }
