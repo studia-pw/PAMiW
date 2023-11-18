@@ -1,7 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using P05Shop.API.Models;
 using P05Shop.API.Services.ProductService;
+using P05Shop.API.Services.SongService;
 using P06Shop.Shared.Services.ProductService;
+using P06Shop.Shared.Services.SongService;
+using P07Shop.DataSeeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +16,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Microsoft.EntityFrameworkCore.SqlServer
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 0, 35)) // Specify the version of your MySQL server
+    );
+});
 
-builder.Services.AddScoped<IProductService, ProductService>();
+
+
+builder.Services.AddScoped<ISongService, SongService>();
 
 // addScoped - obiekt jest tworzony za kazdym razem dla nowego zapytania http
 // jedno zaptranie tworzy jeden obiekt 
