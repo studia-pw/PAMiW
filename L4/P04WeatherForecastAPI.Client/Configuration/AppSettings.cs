@@ -14,6 +14,6 @@ namespace P04WeatherForecastAPI.Client.Configuration
 
         public BaseProductEndpoint BaseProductEndpoint { get; set; }
 
-
+        public BaseSongEndpoint BaseSongEndpoint { get; set; }
     }
 }

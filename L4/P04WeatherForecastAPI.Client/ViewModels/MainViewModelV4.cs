@@ -113,5 +113,15 @@ namespace P04WeatherForecastAPI.Client.ViewModels
             shopProductsView.Show();
             productsViewModel.GetProducts();
         }
+
+        [RelayCommand]
+        public void OpenSongLibrary()
+        {
+            SongView songView = _serviceProvider.GetService<SongView>();
+            SongViewModel songViewModel = _serviceProvider.GetService<SongViewModel>();
+
+            songView.Show();
+            songViewModel.GetSongs();
+        }
     }
 }
