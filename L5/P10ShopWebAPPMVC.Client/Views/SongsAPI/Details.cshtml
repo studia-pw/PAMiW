@@ -1,0 +1,57 @@
+@using P06Shop.Shared.SongModel;
+@model Song
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Song</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Artist)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Artist)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AlbumTitle)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AlbumTitle)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+        <dd class = "col-sm-10">
+            @{
+                var minutes = Model.Duration / 60;
+                var seconds = Model.Duration % 60;
+            }
+            @Html.DisplayFor(modelItem => minutes) min @Html.DisplayFor(modelItem => seconds) s
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+    </dl>
+</div>
+<hr />
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">
+        <button class="btn btn-primary">Edit song</button>
+    </a> |
+    <a asp-action="Index">Back to List</a>
+</div>

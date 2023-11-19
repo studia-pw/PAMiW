@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using P06Shop.Shared.Shop;
+using P06Shop.Shared.SongModel;
 using P07Shop.DataSeeder;
 
 namespace P05Shop.API.Models
@@ -12,28 +13,41 @@ namespace P05Shop.API.Models
             
         }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Song> Songs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // fluent api 
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Barcode)
-                .IsRequired()
-                .HasMaxLength(12);
+            modelBuilder.Entity<Song>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Title)
-                .IsRequired()
-                .HasMaxLength(100);
+            modelBuilder.Entity<Song>()
+                .Property(b => b.Title)
+                .HasMaxLength(50)
+                .IsRequired();
 
-            modelBuilder.Entity<Product>()
-             .Property(p => p.Price)
-             .HasColumnType("decimal(8,2)");
+            modelBuilder.Entity<Song>()
+                .Property(b => b.Duration)
+                .HasColumnType("bigint")
+                .IsRequired();
+
+            modelBuilder.Entity<Song>()
+                .Property(b => b.AlbumTitle)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Song>()
+                .Property(b => b.ReleaseDate)
+                .HasColumnType("date")
+                .IsRequired();
+
+            modelBuilder.Entity<Song>()
+                .Property(b => b.Artist)
+                .HasMaxLength(50)
+                .IsRequired();
 
             // data seed 
 
-            modelBuilder.Entity<Product>().HasData(ProductSeeder.GenerateProductData());
+            modelBuilder.Entity<Song>().HasData(SongSeeder.GenerateSongData());
         }
     }
 }
