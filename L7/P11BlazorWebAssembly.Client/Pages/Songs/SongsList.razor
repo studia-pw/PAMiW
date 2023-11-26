@@ -1,0 +1,127 @@
+@page "/songs/songsLibrary"
+
+@inject ISongService SongService
+@inject NavigationManager NavigationManager
+
+<h1>Full list of songs</h1>
+
+
+<p>
+    <a href="songs/createsong">Create new song</a>
+</p>
+
+
+@if (songs == null)
+{
+    <div class="spinner-border" role="status">
+    </div>
+    <p><em>@message</em></p>
+}
+else
+{
+    
+    <div class="container-xxl">
+        <div>
+            <InputText @bind-Value=searchString></InputText>
+            <button class="btn btn-primary" @onclick=Search>Search</button>
+        </div>
+
+        <div class="row row-cols-1 row-cols-lg-3 g-2">
+
+            @foreach (var song in songs)
+            {
+                <div class="col p-2">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@song.Title</h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">@song.Artist</h6>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">@song.AlbumTitle</li>
+                            <li class="list-group-item">@($"{song.Duration / 60}:{(song.Duration % 60).ToString().PadLeft(2, '0')}")</li>
+                        </ul>
+                        <div class="d-flex flex-row justify-content-start p-2 gap-2">
+                            <button class="btn btn-primary" @onclick="() => GoToEdit(song.Id)">Edit song</button>
+                            <button type="button" class="btn btn-danger" @onclick="() => HandleDelete(song.Id)">Delete song</button>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-body-secondary">@song.ReleaseDate.Date.ToShortDateString()</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item"><button class="page-link" disabled="@(currentPage == 1)" @onclick="PreviousPage">Previous</button></li>
+                <li class="page-item"><button class="page-link">@currentPage</button></li>
+                <li class="page-item"><button class="page-link" @onclick="NextPage">Next</button></li>
+            </ul>
+        </nav>
+
+    </div> 
+}
+    
+
+@code {
+    private List<Song> songs;
+
+    private String message = "Loading songs...";
+    
+    private int currentPage = 1;
+    private const int pageSize = 6;
+    private string searchString = "";
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSongs();
+    }
+
+    private async Task LoadSongs()
+    {
+        var response = await SongService.SearchSongsAsync(searchString, currentPage, pageSize);
+        if (response.Success)
+        {
+            songs = response.Data;
+        }
+        else
+        {
+            Console.WriteLine(response.Message);
+        }
+    }
+    
+    void GoToEdit(int id)
+    {
+        NavigationManager.NavigateTo($"/songs/editsong/{id}");
+    }
+    
+    async Task HandleDelete(int id)
+    {
+        var response = await SongService.DeleteSongByIdAsync(id);
+        if (response.Success)
+            await LoadSongs();
+        else
+            message = response.Message;
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadSongs();
+        }
+    }
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadSongs();
+    }
+
+    private async Task Search()
+    {
+        currentPage = 1;
+        await LoadSongs();
+    }
+} 

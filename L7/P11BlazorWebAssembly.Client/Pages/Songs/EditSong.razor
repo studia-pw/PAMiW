@@ -1,0 +1,45 @@
+﻿@page "/songs/editsong/{Id:int}"
+
+@inject ISongService SongService
+@inject NavigationManager NavigationManager
+
+<h1>Edit song</h1>
+
+@if (song == null)
+{
+    <div class="spinner-border" role="status">
+    </div>
+    <p><em>@message</em></p>
+}
+else
+{
+    <SongForm song="song" OnValidSubmit="HandleValidSubmit"></SongForm>
+}
+
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Song song;
+    private string message = "Loading song...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await SongService.GetSongByIdAsync(Id);
+        if (response.Success)
+            song = response.Data;
+        else
+            message = response.Message;
+    }
+
+    async Task HandleValidSubmit()
+    {
+        var response = await SongService.UpdateSongAsync(song);
+        if (response.Success)
+            NavigationManager.NavigateTo("/songs/songsLibrary");
+        else
+            message = response.Message;
+    }
+}
