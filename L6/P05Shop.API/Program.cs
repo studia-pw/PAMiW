@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using P05Shop.API.Models;
 using P05Shop.API.Services.ProductService;
 using P06Shop.Shared.Services.ProductService;
+using P06Shop.Shared.Services.SongService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +15,15 @@ builder.Services.AddSwaggerGen();
 
 //Microsoft.EntityFrameworkCore.SqlServer
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 0, 35))
+    );
+});
 
 builder.Services.AddScoped<IProductService, P05Shop.API.Services.ProductService.ProductService>();
+builder.Services.AddScoped<ISongService, P05Shop.API.Services.SongService.SongService>();
 
 // addScoped - obiekt jest tworzony za kazdym razem dla nowego zapytania http
 // jedno zaptranie tworzy jeden obiekt 

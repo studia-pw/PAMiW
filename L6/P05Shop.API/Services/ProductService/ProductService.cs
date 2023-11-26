@@ -19,8 +19,8 @@ namespace P05Shop.API.Services.ProductService
         {
             try
             {
-                _dataContext.Products.Add(product);
-                await _dataContext.SaveChangesAsync();
+                // _dataContext.Products.Add(product);
+                // await _dataContext.SaveChangesAsync();
                 return new ServiceResponse<Product>() { Data = product, Success = true };
             }
             catch (Exception)
@@ -41,11 +41,11 @@ namespace P05Shop.API.Services.ProductService
             //var productToDelete = _dataContext.Products.FirstOrDefault(x => x.Id == id);
             //_dataContext.Products.Remove(productToDelete);  
 
-            // sposób 2: (uzywamy attach : tylko jedno zapytanie do bazy)
-            var product = new Product() { Id = id };
-            _dataContext.Products.Attach(product);
-            _dataContext.Products.Remove(product);
-            await _dataContext.SaveChangesAsync();
+            // // sposób 2: (uzywamy attach : tylko jedno zapytanie do bazy)
+            // var product = new Product() { Id = id };
+            // _dataContext.Products.Attach(product);
+            // _dataContext.Products.Remove(product);
+            // await _dataContext.SaveChangesAsync();
 
             return new ServiceResponse<bool>() {  Data = true, Success = true };
         }
@@ -54,10 +54,11 @@ namespace P05Shop.API.Services.ProductService
         {
             try
             {
-                var product = await _dataContext.Products.FindAsync(id);
+                // var product = await _dataContext.Products.FindAsync(id);
                 var response = new ServiceResponse<Product>()
                 {
-                    Data = product,
+                    // Data = product,
+                    Data = null,
                     Message = "Ok",
                     Success = true
                 };
@@ -77,13 +78,14 @@ namespace P05Shop.API.Services.ProductService
 
         public async Task<ServiceResponse<List<Product>>> GetProductsAsync()
         {
-            var products = await _dataContext.Products.ToListAsync();
+            // var products = await _dataContext.Products.ToListAsync();
 
             try
             {
                 var response = new ServiceResponse<List<Product>>()
                 {
-                    Data = products,
+                    // Data = products,
+                    Data = null,
                     Message = "Ok",
                     Success = true
                 };
@@ -104,21 +106,22 @@ namespace P05Shop.API.Services.ProductService
 
         public async Task<ServiceResponse<List<Product>>> SearchProductsAsync(string text, int page, int pageSize)
         {
-            IQueryable<Product> query = _dataContext.Products;
-
-            if (!string.IsNullOrEmpty(text))
-                query = query.Where(x => x.Title.Contains(text) || x.Description.Contains(text));
-
-            var products = await query
-                .Skip(pageSize * (page - 1))
-                .Take(pageSize)
-                .ToListAsync();
-
+            // IQueryable<Product> query = _dataContext.Products;
+            //
+            // if (!string.IsNullOrEmpty(text))
+            //     query = query.Where(x => x.Title.Contains(text) || x.Description.Contains(text));
+            //
+            // var products = await query
+            //     .Skip(pageSize * (page - 1))
+            //     .Take(pageSize)
+            //     .ToListAsync();
+            //
             try
             {
                 var response = new ServiceResponse<List<Product>>()
                 {
-                    Data = products,
+                    // Data = products,
+                    Data = null,
                     Message = "Ok",
                     Success = true
                 };
@@ -140,17 +143,17 @@ namespace P05Shop.API.Services.ProductService
         {
             try
             {
-                var productToEdit = new Product() { Id = product.Id };
-                _dataContext.Products.Attach(productToEdit);
-
-                productToEdit.Title = product.Title;
-                productToEdit.Description = product.Description;
-                productToEdit.Price = product.Price;
-                productToEdit.Barcode = product.Barcode;
-                productToEdit.ReleaseDate = product.ReleaseDate;
-
-                await _dataContext.SaveChangesAsync();
-                return new ServiceResponse<Product> { Data = productToEdit, Success = true };
+                // var productToEdit = new Product() { Id = product.Id };
+                // _dataContext.Products.Attach(productToEdit);
+                //
+                // productToEdit.Title = product.Title;
+                // productToEdit.Description = product.Description;
+                // productToEdit.Price = product.Price;
+                // productToEdit.Barcode = product.Barcode;
+                // productToEdit.ReleaseDate = product.ReleaseDate;
+                //
+                // await _dataContext.SaveChangesAsync();
+                return new ServiceResponse<Product> { Data = null, Success = true };
             }
             catch (Exception)
             {
