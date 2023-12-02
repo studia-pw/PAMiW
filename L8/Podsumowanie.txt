@@ -1,0 +1,22 @@
+﻿ 
+
+ wdrazamy autoryzacje JWT 
+
+ 1) zaczanyamy od API 
+   - dodalismy konfiracje w program.cs
+   - dodalismy AuthController oraz AuthSerice
+   - dodalismy atrybuty [Authroize] do kontrolerow ktore chcemy zabezpieczyc
+   - dodalismy uzytkownika do bazy danych
+
+2) wdrozylismy autoryzacje po stronie klienta webowego (blazor)
+   - dodanie serisów AuthService (w shared bo bedzie uzywany przez wiele komponentow))
+   - dodalismy CustomAuthStateProvider 
+   - dodalismy strony do logowania i rejestracji
+
+
+3) wrozylismy autoryzacje po stronie klienta desktopowego 
+  - dodalismy widok logowania
+  - dodalismy viewmodel logowania
+  - wstrzyklenismy serwis AuthService do viewmodelu
+  - zaimplementowalismy prostą logię przechowywania tokena w pliku
+
