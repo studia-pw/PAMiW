@@ -1,0 +1,31 @@
+﻿@page "/songs/createsong"
+
+@inject ISongService SongService
+@inject NavigationManager NavigationManager
+
+<h3>Create song</h3>
+
+@if (message != null)
+{
+    <p><em>@message</em></p>
+}
+else
+{
+    <SongForm song="song" OnValidSubmit="HandleValidSubmit"></SongForm>
+}
+
+@code {
+    private Song song = new Song();
+    private string? message = null;
+
+    async Task HandleValidSubmit()
+    {
+        var response = await SongService.CreateSongAsync(song);
+        if (response.Success)
+            NavigationManager.NavigateTo("/songs/songsLibrary");
+        else
+            message = response.Message;
+    }
+
+
+}
