@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using P06Shop.Shared.Auth;
 using P07Shop.DataSeeder;
 using P06Shop.Shared.SongModel;
 
@@ -9,6 +10,7 @@ namespace P05Shop.API.Models
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Song> Songs { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<Song>()

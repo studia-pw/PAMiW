@@ -1,5 +1,9 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using P05Shop.API.Models;
+using P05Shop.API.Services.AuthService;
 using P05Shop.API.Services.ProductService;
 using P06Shop.Shared.Services.ProductService;
 using P06Shop.Shared.Services.SongService;
@@ -24,6 +28,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddScoped<IProductService, P05Shop.API.Services.ProductService.ProductService>();
 builder.Services.AddScoped<ISongService, P05Shop.API.Services.SongService.SongService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // addScoped - obiekt jest tworzony za kazdym razem dla nowego zapytania http
 // jedno zaptranie tworzy jeden obiekt 
@@ -32,6 +37,20 @@ builder.Services.AddScoped<ISongService, P05Shop.API.Services.SongService.SongSe
 // nawet wielokrotnie w cyklu jedengo zaptrania 
 
 //addsingleton - nowa instancja klasy tworzona jest tylko 1 na caly cykl trwania naszej aplikacji 
+
+string token = builder.Configuration.GetSection("AppSettings:Token").Value;
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        // options.Authority = "https://localhost:5001";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(token)),
+            ValidateIssuerSigningKey = true,
+        };
+    });
 
 
 builder.Services.AddCors(options =>
@@ -60,6 +79,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("MyCorsePolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

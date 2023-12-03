@@ -1,5 +1,7 @@
 ﻿@page "/products/productsList"
+@using Microsoft.AspNetCore.Authorization
 
+@attribute [Authorize]
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
 

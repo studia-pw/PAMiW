@@ -1,5 +1,6 @@
 @page "/songs/songsLibrary"
 
+@attribute [Authorize]
 @inject ISongService SongService
 @inject NavigationManager NavigationManager
 
@@ -75,11 +76,13 @@ else
     
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("OnInitializedAsync");
         await LoadSongs();
     }
 
     private async Task LoadSongs()
     {
+        Console.WriteLine("LoadSongs");
         var response = await SongService.SearchSongsAsync(searchString, currentPage, pageSize);
         if (response.Success)
         {
