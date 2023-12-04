@@ -7,6 +7,7 @@ using P04WeatherForecastAPI.Client.Services.WeatherServices;
 using P04WeatherForecastAPI.Client.ViewModels;
 using P06Shop.Shared.Configuration;
 using P06Shop.Shared.MessageBox;
+using P06Shop.Shared.Services.AuthService;
 using P06Shop.Shared.Services.ProductService;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,9 @@ namespace P04WeatherForecastAPI.Client
             //Microsoft.Extensions.Options.ConfigurationExtensions
             var appSettings = _configuration.GetSection(nameof(AppSettings));
             var appSettingsSection = appSettings.Get<AppSettings>();
-            services.Configure<AppSettings>(appSettings);
+         
+            // services.Configure<AppSettings>(appSettings);
+            services.AddSingleton(appSettingsSection);
             return appSettingsSection;
         }
 
@@ -73,6 +76,7 @@ namespace P04WeatherForecastAPI.Client
             services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<IMessageDialogService, WpfMesageDialogService>();
             services.AddSingleton<ISpeechService>(_ => new SpeechService(appSettings.SpeechSettings));
+           
         }
 
         private void ConfigureViewModels(IServiceCollection services)
@@ -82,6 +86,7 @@ namespace P04WeatherForecastAPI.Client
             services.AddSingleton<MainViewModelV4>();
             services.AddSingleton<FavoriteCityViewModel>();
             services.AddSingleton<ProductsViewModel>();
+            services.AddSingleton<LoginViewModel>();
             // services.AddSingleton<BaseViewModel,MainViewModelV3>();
         }
 
@@ -92,16 +97,20 @@ namespace P04WeatherForecastAPI.Client
             services.AddTransient<FavoriteCitiesView>();
             services.AddTransient<ShopProductsView>();
             services.AddTransient<ProductDetailsView>();
+            services.AddTransient<LoginView>();
         }
 
         private void ConfigureHttpClients(IServiceCollection services, AppSettings appSettingsSection)
         {
             var uriBuilder = new UriBuilder(appSettingsSection.BaseAPIUrl)
             {
-                Path = appSettingsSection.BaseProductEndpoint.Base_url,
+               // Path = appSettingsSection.BaseAPIUrl,
             };
             //Microsoft.Extensions.Http
             services.AddHttpClient<IProductService, ProductService>(client => client.BaseAddress = uriBuilder.Uri);
+            services.AddHttpClient<IAuthService, AuthService>(client => client.BaseAddress = uriBuilder.Uri);
+
+            
         }
 
         private void OnStartup(object sender, StartupEventArgs e)

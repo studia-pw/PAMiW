@@ -5,6 +5,7 @@ using P04WeatherForecastAPI.Client.Commands;
 using P04WeatherForecastAPI.Client.DataSeeders;
 using P04WeatherForecastAPI.Client.Models;
 using P04WeatherForecastAPI.Client.Services.WeatherServices;
+using P06Shop.Shared.MessageBox;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,18 +24,20 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         private CityViewModel _selectedCity;
         private Weather _weather;
         private readonly IAccuWeatherService _accuWeatherService;
+        private readonly IMessageDialogService _messageDialogService;
 
         //favorite city 
         private readonly FavoriteCitiesView _favoriteCitiesView;
         private readonly FavoriteCityViewModel _favoriteCityViewModel;
         //public ICommand LoadCitiesCommand { get;  }
         private readonly IServiceProvider _serviceProvider;
+        public string LoginState { get; set; }
 
        
 
         public MainViewModelV4(IAccuWeatherService accuWeatherService, 
             FavoriteCityViewModel favoriteCityViewModel, FavoriteCitiesView favoriteCitiesView,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider, IMessageDialogService messageDialogService)
         {
             _favoriteCitiesView = favoriteCitiesView;
             _favoriteCityViewModel = favoriteCityViewModel;
@@ -46,7 +49,8 @@ namespace P04WeatherForecastAPI.Client.ViewModels
                 _accuWeatherService = accuWeatherService;
             Cities = new ObservableCollection<CityViewModel>(); // podejście nr 2 
 
-
+            _messageDialogService = messageDialogService;
+            LoginState = String.IsNullOrEmpty(LoginViewModel.Token) ? "Login" : "Logout";
         }
 
         //[ObservableProperty]
@@ -107,11 +111,45 @@ namespace P04WeatherForecastAPI.Client.ViewModels
         [RelayCommand]
         public void OpenShopWindow()
         {
-            ShopProductsView shopProductsView = _serviceProvider.GetService<ShopProductsView>();
-            ProductsViewModel productsViewModel = _serviceProvider.GetService<ProductsViewModel>();
+            if (!string.IsNullOrEmpty(LoginViewModel.Token))
+            {
+                ShopProductsView shopProductsView = _serviceProvider.GetService<ShopProductsView>();
+                ProductsViewModel productsViewModel = _serviceProvider.GetService<ProductsViewModel>();
 
-            shopProductsView.Show();
-            productsViewModel.GetProducts();
+                shopProductsView.Show();
+                productsViewModel.GetProducts();
+            }
+            else
+            {
+                
+            }
+            
         }
+
+        [RelayCommand]
+        public void OpenLoginWindow()
+        {
+            LoginView loginView = _serviceProvider.GetService<LoginView>();
+            LoginViewModel loginViewModel = _serviceProvider.GetService<LoginViewModel>();
+
+            loginView.Show();    
+    
+        }
+
+        [RelayCommand]
+        public void Logout()
+        {
+            if (!String.IsNullOrEmpty(LoginViewModel.Token))
+            {
+                LoginViewModel.Token = String.Empty;
+                _messageDialogService.ShowMessage("Successfully logged out");
+            }
+            else
+            {
+                _messageDialogService.ShowMessage("You are not logged in");
+            }
+        }
+
+
     }
 }
